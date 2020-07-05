@@ -37,16 +37,11 @@ public class BronzeLeagueBotApplication {
 	@PostConstruct
 	public void init() throws LoginException {
 
-		String BOT_TOKEN = "NzAyMzY0NDc3NDQxNzAzOTc3.Xp_CAg.0Ya9vu1udMDUO_7zrXcgEVWKw7E";
 //		String BOT_TOKEN = System.getenv("BOT_TOKEN");
 		this.jda = JDABuilder
 				.createDefault(BOT_TOKEN, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGES)
 				.addEventListeners(messageListener, channelListener).build();
 
-//		String TESTING_BOT_TOKEN = "NzAyMzY0NDc3NDQxNzAzOTc3.Xp_CAg.0Ya9vu1udMDUO_7zrXcgEVWKw7E";
-//		this.jda = JDABuilder
-//				.createDefault(TESTING_BOT_TOKEN, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGES)
-//				.addEventListeners(messageListener, channelListener).build();
 
 	}
 
