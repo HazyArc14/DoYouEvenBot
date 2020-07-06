@@ -286,7 +286,7 @@ public class MessageListener extends ListenerAdapter {
 
         String roleInfoMessage = "```\n" +
                 "What is all this role business?\n" +
-                " - This server has 7 roles and they are Bronze, Silver, Gold, Platinum, Diamond, Master, & GrandMaster\n" +
+                " - This server has 6 roles and they are Guardian, Brave, Heroic, Fabled, Mythic, & Legend\n" +
                 "\n" +
                 "How do I get these roles?\n" +
                 " - Simple, just be in the voice channel to get points.\n" +
@@ -301,16 +301,12 @@ public class MessageListener extends ListenerAdapter {
                 " - Nope. We fixed that ;)\n" +
                 "\n" +
                 "How many points do I need to get to the next role?\n" +
-                " - Bronze = 0\n" +
-                " - Silver = 100\n" +
-                " - Gold = 200\n" +
-                " - Platinum = 500\n" +
-                " - Diamond = 1250\n" +
-                " - Master = 2000\n" +
-                " - GrandMaster = 3500\n" +
-                "\n" +
-                "Anything else I should know?\n" +
-                " - Yeah, there is actually role decay as well. Which starts after 7 days of not joining a channel and each role has different decay values. You can also never decay out of Silver.\n" +
+                " - Guardian = 0\n" +
+                " - Brave = 100\n" +
+                " - Heroic = 200\n" +
+                " - Fabled = 500\n" +
+                " - Mythic = 1250\n" +
+                " - Legend = 2000\n" +
                 "```";
 
         if (isPrivate)
