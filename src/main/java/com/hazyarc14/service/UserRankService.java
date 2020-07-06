@@ -29,7 +29,7 @@ public class UserRankService {
     public static final Double minsPerPointEarned = 10.0;
     public static final Double serverBoosterBonus = 1.10;
 
-    private static final List<String> guildRoleNames = Arrays.asList("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "GrandMaster");
+    private static final List<String> guildRoleNames = Arrays.asList("Guardian", "Brave", "Heroic", "Fabled", "Mythic", "Legend");
 
     @Autowired
     UserInfoRepository userInfoRepository;
@@ -141,7 +141,7 @@ public class UserRankService {
 
     public void updateAllUserRanks(JDA jda) {
 
-        Guild guild = jda.getGuildById(93106003628806144L);
+        Guild guild = jda.getGuildById(376520761340329984L);
         TextChannel defaultChannel = guild.getDefaultChannel();
 
         List<UserInfo> userInfoList = userInfoRepository.findAll();
@@ -183,7 +183,7 @@ public class UserRankService {
 
     public void applyDecayToUserRanks(JDA jda) {
 
-        Guild guild = jda.getGuildById(93106003628806144L);
+        Guild guild = jda.getGuildById(376520761340329984L);
 
         List<UserInfo> userInfoList = userInfoRepository.findAll();
         Timestamp currentTm = new Timestamp(System.currentTimeMillis());
@@ -217,26 +217,23 @@ public class UserRankService {
 
     public Double calculateDecayValue(Double rank) {
 
-        if (rank < RANK.SILVER.getValue())
+        if (rank < RANK.BRAVE.getValue())
             return 0.0;
 
-        if (rank >= RANK.SILVER.getValue() && rank < RANK.GOLD.getValue())
+        if (rank >= RANK.BRAVE.getValue() && rank < RANK.HEROIC.getValue())
             return 1.0;
 
-        if (rank >= RANK.GOLD.getValue() && rank < RANK.PLATINUM.getValue())
+        if (rank >= RANK.HEROIC.getValue() && rank < RANK.FABLED.getValue())
             return 5.0;
 
-        if (rank >= RANK.PLATINUM.getValue() && rank < RANK.DIAMOND.getValue())
+        if (rank >= RANK.FABLED.getValue() && rank < RANK.MYTHIC.getValue())
             return 10.0;
 
-        if (rank >= RANK.DIAMOND.getValue() && rank < RANK.MASTER.getValue())
+        if (rank >= RANK.MYTHIC.getValue() && rank < RANK.LEGEND.getValue())
             return 15.0;
 
-        if (rank >= RANK.MASTER.getValue() && rank < RANK.GRANDMASTER.getValue())
+        if (rank >= RANK.LEGEND.getValue())
             return 20.0;
-
-        if (rank >= RANK.GRANDMASTER.getValue())
-            return 30.0;
 
         return 0.0;
 
@@ -244,26 +241,23 @@ public class UserRankService {
 
     public RANK calculateRoleByRank(Double rank) {
 
-        if (rank < RANK.SILVER.getValue())
-            return RANK.BRONZE;
+        if (rank < RANK.BRAVE.getValue())
+            return RANK.GUARDIAN;
 
-        if (rank >= RANK.SILVER.getValue() && rank < RANK.GOLD.getValue())
-            return RANK.SILVER;
+        if (rank >= RANK.BRAVE.getValue() && rank < RANK.HEROIC.getValue())
+            return RANK.BRAVE;
 
-        if (rank >= RANK.GOLD.getValue() && rank < RANK.PLATINUM.getValue())
-            return RANK.GOLD;
+        if (rank >= RANK.HEROIC.getValue() && rank < RANK.FABLED.getValue())
+            return RANK.HEROIC;
 
-        if (rank >= RANK.PLATINUM.getValue() && rank < RANK.DIAMOND.getValue())
-            return RANK.PLATINUM;
+        if (rank >= RANK.FABLED.getValue() && rank < RANK.MYTHIC.getValue())
+            return RANK.FABLED;
 
-        if (rank >= RANK.DIAMOND.getValue() && rank < RANK.MASTER.getValue())
-            return RANK.DIAMOND;
+        if (rank >= RANK.MYTHIC.getValue() && rank < RANK.LEGEND.getValue())
+            return RANK.MYTHIC;
 
-        if (rank >= RANK.MASTER.getValue() && rank < RANK.GRANDMASTER.getValue())
-            return RANK.MASTER;
-
-        if (rank >= RANK.GRANDMASTER.getValue())
-            return RANK.GRANDMASTER;
+        if (rank >= RANK.LEGEND.getValue())
+            return RANK.LEGEND;
 
         return null;
 

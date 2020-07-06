@@ -6,6 +6,7 @@ import com.hazyarc14.service.UserRankService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -37,18 +38,17 @@ public class BronzeLeagueBotApplication {
 	@PostConstruct
 	public void init() throws LoginException {
 
-//		String BOT_TOKEN = System.getenv("BOT_TOKEN");
+		String BOT_TOKEN = System.getenv("BOT_TOKEN");
 		this.jda = JDABuilder
 				.createDefault(BOT_TOKEN, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGES)
 				.addEventListeners(messageListener, channelListener).build();
 
-
 	}
 
-	@Scheduled(cron = "0 0 5 * * *")
-	public void applyDecayToUserRanks() {
-		userRankService.applyDecayToUserRanks(this.jda);
-	}
+//	@Scheduled(cron = "0 0 5 * * *")
+//	public void applyDecayToUserRanks() {
+//		userRankService.applyDecayToUserRanks(this.jda);
+//	}
 
 	@Scheduled(fixedDelay = 60000)
 	public void updateUserRanks() {
