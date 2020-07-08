@@ -5,10 +5,7 @@ import com.hazyarc14.model.UserInfo;
 import com.hazyarc14.repository.UserInfoRepository;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,6 +64,16 @@ public class UserRankService {
         for (Member serverBooster: serverBoosters) {
             if (serverBooster.getIdLong() == userInfo.getUserId())
                 pointsToAdd *= serverBoosterBonus;
+        }
+
+        if (member.getVoiceState().inVoiceChannel()) {
+            Integer membersInChannelCount = member.getVoiceState().getChannel().getMembers().size();
+
+            if (membersInChannelCount >= 6 && membersInChannelCount < 8) {
+                pointsToAdd *= 1.5;
+            } else if (membersInChannelCount >= 8) {
+                pointsToAdd *= 2.0;
+            }
         }
 
         Double updatedRank = currentRank + pointsToAdd;
