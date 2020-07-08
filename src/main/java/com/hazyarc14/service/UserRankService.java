@@ -67,12 +67,17 @@ public class UserRankService {
         }
 
         if (member.getVoiceState().inVoiceChannel()) {
-            Integer membersInChannelCount = member.getVoiceState().getChannel().getMembers().size();
+            VoiceChannel voiceChannel = member.getVoiceState().getChannel();
+            System.out.println("Member in VoiceChannel " + voiceChannel.getName());
+            if (!voiceChannel.getMembers().isEmpty()) {
+                System.out.println("VoiceChannel members count" + voiceChannel.getMembers().size());
+                Integer membersInChannelCount = voiceChannel.getMembers().size();
 
-            if (membersInChannelCount >= 6 && membersInChannelCount < 8) {
-                pointsToAdd *= 1.5;
-            } else if (membersInChannelCount >= 8) {
-                pointsToAdd *= 2.0;
+                if (membersInChannelCount >= 6 && membersInChannelCount < 8) {
+                    pointsToAdd *= 1.5;
+                } else if (membersInChannelCount >= 8) {
+                    pointsToAdd *= 2.0;
+                }
             }
         }
 
