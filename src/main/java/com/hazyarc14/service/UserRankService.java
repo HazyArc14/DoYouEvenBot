@@ -66,19 +66,21 @@ public class UserRankService {
                 pointsToAdd *= serverBoosterBonus;
         }
 
-        if (member.getVoiceState().inVoiceChannel()) {
-            VoiceChannel voiceChannel = member.getVoiceState().getChannel();
-            System.out.println("Member in VoiceChannel " + voiceChannel.getName());
-            if (!voiceChannel.getMembers().isEmpty()) {
-                System.out.println("VoiceChannel members count" + voiceChannel.getMembers().size());
-                Integer membersInChannelCount = voiceChannel.getMembers().size();
+        if (member != null) {
 
-                if (membersInChannelCount >= 6 && membersInChannelCount < 8) {
-                    pointsToAdd *= 1.5;
-                } else if (membersInChannelCount >= 8) {
-                    pointsToAdd *= 2.0;
+            if (member.getVoiceState().inVoiceChannel()) {
+                VoiceChannel voiceChannel = member.getVoiceState().getChannel();
+                if (!voiceChannel.getMembers().isEmpty()) {
+                    Integer membersInChannelCount = voiceChannel.getMembers().size();
+
+                    if (membersInChannelCount >= 6 && membersInChannelCount < 8) {
+                        pointsToAdd *= 1.5;
+                    } else if (membersInChannelCount >= 8) {
+                        pointsToAdd *= 2.0;
+                    }
                 }
             }
+
         }
 
         Double updatedRank = currentRank + pointsToAdd;
@@ -164,8 +166,9 @@ public class UserRankService {
             userInfoList.forEach(userRank -> {
                 if (userRank.getActive()) {
 
-                    Member member = guild.getMemberById(userRank.getUserId());
-                    UserInfo updatedUserInfo = calculateUserRank(guild, member, userRank);
+                    guild.retrieveMemberById(userRank.getUserId()).queue(member -> {
+                        UserInfo updatedUserInfo = calculateUserRank(guild, member, userRank);
+                    });
 
                 }
             });
