@@ -73,10 +73,8 @@ public class UserRankService {
                 if (!voiceChannel.getMembers().isEmpty()) {
                     Integer membersInChannelCount = voiceChannel.getMembers().size();
 
-                    if (membersInChannelCount >= 6 && membersInChannelCount < 8) {
+                    if (membersInChannelCount >= 5) {
                         pointsToAdd *= 1.5;
-                    } else if (membersInChannelCount >= 8) {
-                        pointsToAdd *= 2.0;
                     }
                 }
             }
