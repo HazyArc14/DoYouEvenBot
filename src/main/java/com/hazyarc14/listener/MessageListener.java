@@ -265,16 +265,44 @@ public class MessageListener extends ListenerAdapter {
 
     private void sendRankAllMessage(MessageReceivedEvent event, Boolean isPrivate) {
 
-        String rankAllMessage = "```Current User Ranks:\n";
+        String legendUsers = RANK.LEGEND.getRoleName() + " (" + RANK.LEGEND.getValue() + "):\n";;
+        String mythicUsers = RANK.MYTHIC.getRoleName() + " (" + RANK.MYTHIC.getValue() + "):\n";;
+        String fabledUsers = RANK.FABLED.getRoleName() + " (" + RANK.FABLED.getValue() + "):\n";;
+        String heroicUsers = RANK.HEROIC.getRoleName() + " (" + RANK.HEROIC.getValue() + "):\n";;
+        String braveUsers = RANK.BRAVE.getRoleName() + " (" + RANK.BRAVE.getValue() + "):\n";;
+        String guardianUsers = RANK.GUARDIAN.getRoleName() + " (" + RANK.GUARDIAN.getValue() + "):\n";;
 
         List<UserInfo> userInfoList = userInfoRepository.findAll(Sort.by(Sort.Direction.DESC, "rank"));
         for (UserInfo userInfo : userInfoList) {
 
-            if (userInfo.getRank() != 0.0)
-                rankAllMessage += userInfo.getUserName() + " - " + String.format("%.2f", userInfo.getRank()) + "\n";
+            Double userRank = userInfo.getRank();
+            if (userRank != 0.0) {
+
+                if (userRank >= RANK.LEGEND.getValue())
+                    legendUsers += userInfo.getUserName() + " - " + String.format("%.2f", userRank) + "\n";
+                else if (userRank >= RANK.MYTHIC.getValue())
+                    mythicUsers += userInfo.getUserName() + " - " + String.format("%.2f", userRank) + "\n";
+                else if (userRank >= RANK.FABLED.getValue())
+                    fabledUsers += userInfo.getUserName() + " - " + String.format("%.2f", userRank) + "\n";
+                else if (userRank >= RANK.HEROIC.getValue())
+                    heroicUsers += userInfo.getUserName() + " - " + String.format("%.2f", userRank) + "\n";
+                else if (userRank >= RANK.BRAVE.getValue())
+                    braveUsers += userInfo.getUserName() + " - " + String.format("%.2f", userRank) + "\n";
+                else if (userRank >= RANK.GUARDIAN.getValue())
+                    guardianUsers += userInfo.getUserName() + " - " + String.format("%.2f", userRank) + "\n";
+
+            }
 
         }
-        rankAllMessage += "```";
+
+        String rankAllMessage = "```"
+                + legendUsers + "\n"
+                + mythicUsers + "\n"
+                + fabledUsers + "\n"
+                + heroicUsers + "\n"
+                + braveUsers + "\n"
+                + guardianUsers + "\n"
+                + "```";
 
         if (isPrivate)
             event.getPrivateChannel().sendMessage(rankAllMessage).queue();
