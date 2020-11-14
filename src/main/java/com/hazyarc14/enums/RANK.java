@@ -7,7 +7,8 @@ public enum RANK {
     HEROIC("Heroic",250.0),
     FABLED("Fabled",500.0),
     MYTHIC("Mythic",1250.0),
-    LEGEND("Legend",2500.0);
+    LEGEND("Legend",2500.0),
+    MAX("MAX", 9999.9);
 
     private String roleName;
     private double value;

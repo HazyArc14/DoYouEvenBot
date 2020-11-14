@@ -235,7 +235,16 @@ public class MessageListener extends ListenerAdapter {
             UserInfo updatedUserInfo = userInfo;
 
             RANK currentUserRank = userRankService.calculateRoleByRank(updatedUserInfo.getRank());
+            RANK nextUserRank = currentUserRank.next();
             List<Role> roles = event.getGuild().getRolesByName(currentUserRank.getRoleName(), false);
+
+            Double pointsToNextRank = nextUserRank.getValue() - updatedUserInfo.getRank();
+            String ebDescription = "";
+            if (!nextUserRank.getRoleName().equalsIgnoreCase("MAX")) {
+                ebDescription = String.format("%.2f", pointsToNextRank) + " points until next rank (" + String.format("%.2f", updatedUserInfo.getRank()) + "/" + (int) nextUserRank.getValue() + ")";
+            } else {
+                ebDescription = "You have the highest rank in the land!";
+            }
 
             if (!roles.isEmpty()) {
 
@@ -244,18 +253,19 @@ public class MessageListener extends ListenerAdapter {
                 EmbedBuilder eb = new EmbedBuilder();
 
                 eb.setColor(rankColor);
-                eb.setTitle("Current Role is " + currentUserRank.getRoleName() + ".");
-                eb.setDescription("Rank " + String.format("%.2f", userInfo.getRank()) + " of " + currentUserRank.next().getValue());
+                eb.setTitle("Rank: " + currentUserRank.getRoleName());
+                eb.setDescription(ebDescription);
                 eb.setAuthor(userInfo.getUserName(), null, targetMember.getUser().getAvatarUrl());
 
-                if (isPrivate)
+                if (isPrivate) {
                     event.getPrivateChannel().sendMessage("Current Role & Rank").embed(eb.build()).queue();
-                else
+                } else {
                     event.getChannel().sendMessage("Current Role & Rank").embed(eb.build()).queue(sentMessage -> {
-                        CompletableFuture.delayedExecutor(15, TimeUnit.SECONDS).execute(() -> {
+                        CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS).execute(() -> {
                             sentMessage.delete().queue();
                         });
                     });
+                }
 
             }
 
@@ -265,12 +275,19 @@ public class MessageListener extends ListenerAdapter {
 
     private void sendRankAllMessage(MessageReceivedEvent event, Boolean isPrivate) {
 
-        String legendUsers = RANK.LEGEND.getRoleName() + " (" + RANK.LEGEND.getValue() + "):\n";;
-        String mythicUsers = RANK.MYTHIC.getRoleName() + " (" + RANK.MYTHIC.getValue() + "):\n";;
-        String fabledUsers = RANK.FABLED.getRoleName() + " (" + RANK.FABLED.getValue() + "):\n";;
-        String heroicUsers = RANK.HEROIC.getRoleName() + " (" + RANK.HEROIC.getValue() + "):\n";;
-        String braveUsers = RANK.BRAVE.getRoleName() + " (" + RANK.BRAVE.getValue() + "):\n";;
-        String guardianUsers = RANK.GUARDIAN.getRoleName() + " (" + RANK.GUARDIAN.getValue() + "):\n";;
+        String legendTitle = RANK.LEGEND.getRoleName() + " (" + (int) RANK.LEGEND.getValue() + ")";
+        String mythicTitle = RANK.MYTHIC.getRoleName() + " (" + (int) RANK.MYTHIC.getValue() + " - " + (int)(RANK.MYTHIC.next().getValue() - 1) + ")";
+        String fabledTitle = RANK.FABLED.getRoleName() + " (" + (int) RANK.FABLED.getValue() + " - " + (int)(RANK.FABLED.next().getValue() - 1) + ")";
+        String heroicTitle = RANK.HEROIC.getRoleName() + " (" + (int) RANK.HEROIC.getValue() + " - " + (int)(RANK.HEROIC.next().getValue() - 1) + ")";
+        String braveTitle = RANK.BRAVE.getRoleName() + " (" + (int) RANK.BRAVE.getValue() + " - " + (int)(RANK.BRAVE.next().getValue() - 1) + ")";
+        String guardianTitle = RANK.GUARDIAN.getRoleName() + " (" + (int) RANK.GUARDIAN.getValue() + " - " + (int)(RANK.GUARDIAN.next().getValue() - 1) + ")";
+
+        String legendUsers = "";
+        String mythicUsers = "";
+        String fabledUsers = "";
+        String heroicUsers = "";
+        String braveUsers = "";
+        String guardianUsers = "";
 
         List<UserInfo> userInfoList = userInfoRepository.findAll(Sort.by(Sort.Direction.DESC, "rank"));
         for (UserInfo userInfo : userInfoList) {
@@ -295,19 +312,28 @@ public class MessageListener extends ListenerAdapter {
 
         }
 
-        String rankAllMessage = "```"
-                + legendUsers + "\n"
-                + mythicUsers + "\n"
-                + fabledUsers + "\n"
-                + heroicUsers + "\n"
-                + braveUsers + "\n"
-                + guardianUsers + "\n"
-                + "```";
+        legendUsers = (legendUsers.isBlank() || legendUsers.isEmpty()) ? "" : "```" + legendUsers + "```";
+        mythicUsers = (mythicUsers.isBlank() || mythicUsers.isEmpty()) ? "" : "```" + mythicUsers + "```";
+        fabledUsers = (fabledUsers.isBlank() || fabledUsers.isEmpty()) ? "" : "```" + fabledUsers + "```";
+        heroicUsers = (heroicUsers.isBlank() || heroicUsers.isEmpty()) ? "" : "```" + heroicUsers + "```";
+        braveUsers = (braveUsers.isBlank() || braveUsers.isEmpty()) ? "" : "```" + braveUsers + "```";
+        guardianUsers = (guardianUsers.isBlank() || guardianUsers.isEmpty()) ? "" : "```" + guardianUsers + "```";
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setColor(Color.GREEN);
+        eb.setTitle("Ranks");
+        eb.addField(legendTitle, legendUsers, false);
+        eb.addField(mythicTitle, mythicUsers, false);
+        eb.addField(fabledTitle, fabledUsers, false);
+        eb.addField(heroicTitle, heroicUsers, false);
+        eb.addField(braveTitle, braveUsers, false);
+        eb.addField(guardianTitle, guardianUsers, false);
 
         if (isPrivate)
-            event.getPrivateChannel().sendMessage(rankAllMessage).queue();
+            event.getPrivateChannel().sendMessage("⠀").embed(eb.build()).queue();
         else
-            event.getChannel().sendMessage(rankAllMessage).queue();
+            event.getChannel().sendMessage("⠀").embed(eb.build()).queue();
 
     }
 
