@@ -3,10 +3,10 @@ package com.hazyarc14.enums;
 public enum RANK {
 
     GUARDIAN("Guardian", 0.0),
-    BRAVE("Brave",100.0),
-    HEROIC("Heroic",250.0),
-    FABLED("Fabled",500.0),
-    MYTHIC("Mythic",1250.0),
+    BRAVE("Brave",30.0),
+    HEROIC("Heroic",150.0),
+    FABLED("Fabled",300.0),
+    MYTHIC("Mythic",1000.0),
     LEGEND("Legend",2500.0),
     MAX("MAX", 9999.9);
 
